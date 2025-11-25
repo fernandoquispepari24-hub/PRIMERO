@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promedio de Distancias Planetarias</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f0f8ff;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        h2 {
+            color: #1e90ff; /* Azul brillante */
+            text-align: center;
+        }
+        .input-group, .action-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        label {
+            align-self: center;
+            font-weight: bold;
+        }
+        input[type="number"] {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        #btn-agregar {
+            background-color: #28a745; /* Verde */
+            color: white;
+        }
+        #btn-agregar:hover {
+            background-color: #1e7e34;
+        }
+        #btn-calcular {
+            background-color: #ff8c00; /* Naranja oscuro */
+            color: white;
+            flex-grow: 1;
+        }
+        #btn-calcular:hover {
+            background-color: #cc7000;
+        }
+        #lista-distancias {
+            border: 1px dashed #1e90ff;
+            padding: 10px;
+            min-height: 50px;
+            margin-top: 15px;
+            border-radius: 5px;
+            background-color: #f9f9ff;
+        }
+        #resultado {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: #d4edda; /* Verde claro */
+            color: #155724; /* Verde oscuro */
+            font-size: 1.2em;
+            text-align: center;
+            font-weight: bold;
+        }
+        .distancia-item {
+            display: inline-block;
+            background-color: #e9ecef;
+            padding: 5px 10px;
+            margin: 3px;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>🌌 Promedio de Distancias Interplanetarias</h2>
+        
+        <div class="input-group">
+            <label for="distancia">Distancia (Millones de km):</label>
+            <input type="number" id="distancia" step="any" placeholder="Ej: 149.6 (Tierra-Sol)">
+            <button id="btn-agregar" onclick="agregarDistancia()">➕ Agregar</button>
+        </div>
+
+        <p>Distancias registradas:</p>
+        <div id="lista-distancias">Aún no hay distancias.</div>
+
+        <div class="action-group">
+            <button id="btn-calcular" onclick="calcularPromedio()">Calcular Promedio</button>
+        </div>
+
+        <div id="resultado">Presiona "Calcular Promedio" para ver el resultado.</div>
+    </div>
+
+    <script>
+        // Array para almacenar todas las distancias
+        let distancias = [];
+
+        function agregarDistancia() {
+            const distanciaInput = document.getElementById('distancia');
+            const valor = parseFloat(distanciaInput.value);
+
+            // 1. Validar la entrada
+            if (isNaN(valor) || valor <= 0) {
+                alert("Por favor, ingresa una distancia válida y positiva.");
+                return;
+            }
+
+            // 2. Almacenar la distancia
+            distancias.push(valor);
+
+            // 3. Actualizar la lista visible en la interfaz
+            actualizarListaDistancias();
+
+            // 4. Limpiar el campo de entrada
+            distanciaInput.value = '';
+            distanciaInput.focus();
+        }
+
+        function actualizarListaDistancias() {
+            const listaDiv = document.getElementById('lista-distancias');
+            listaDiv.innerHTML = ''; // Limpiar contenido anterior
+
+            if (distancias.length === 0) {
+                listaDiv.innerHTML = 'Aún no hay distancias.';
+                return;
+            }
+
+            // Usar un bucle FOR para mostrar cada distancia registrada
+            for (let i = 0; i < distancias.length; i++) {
+                const item = document.createElement('span');
+                item.className = 'distancia-item';
+                // Muestra la distancia con 2 decimales y la unidad
+                item.textContent = `${distancias[i].toFixed(2)} M km`; 
+                listaDiv.appendChild(item);
+            }
+        }
+
+        function calcularPromedio() {
+            const resultadoDiv = document.getElementById('resultado');
+
+            if (distancias.length === 0) {
+                resultadoDiv.innerHTML = "🛑 **Error:** ¡No hay distancias registradas para calcular el promedio!";
+                resultadoDiv.style.backgroundColor = '#f8d7da';
+                resultadoDiv.style.color = '#721c24';
+                return;
+            }
+
+            let suma = 0;
+            
+            // 1. Usar un bucle FOR para sumar todas las distancias
+            for (let i = 0; i < distancias.length; i++) {
+                suma += distancias[i];
+            }
+
+            // 2. Calcular el promedio
+            const promedio = suma / distancias.length;
+
+            // 3. Mostrar el resultado
+            resultadoDiv.innerHTML = `✅ **Promedio Calculado**<br>
+                                     Distancias registradas: **${distancias.length}**<br>
+                                     Promedio: **${promedio.toFixed(2)}** Millones de km`;
+            
+            resultadoDiv.style.backgroundColor = '#d4edda';
+            resultadoDiv.style.color = '#155724';
+            
+            // Opcional: limpiar la lista y el array después de calcular
+            // distancias = [];
+            // actualizarListaDistancias();
+        }
+
+        // Inicializar el estado de la lista al cargar la página
+        document.addEventListener('DOMContentLoaded', actualizarListaDistancias);
+    </script>
+
+</body>
+</html>

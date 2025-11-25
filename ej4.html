@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Identificador de Cuerpo Celeste</title>
+    <style>
+        body {
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            margin: 20px;
+            background-color: #1a1a2e; /* Fondo oscuro espacial */
+            color: #e0e0ff;
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 30px;
+            background-color: #0f0f20;
+            border: 2px solid #5a5a8a;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(70, 70, 150, 0.5);
+        }
+        h2 {
+            color: #a4c6e2; /* Azul claro */
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        input[type="number"] {
+            width: calc(100% - 22px);
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #3c3c6c;
+            border-radius: 6px;
+            background-color: #2a2a44;
+            color: #ffffff;
+            font-size: 16px;
+        }
+        button {
+            background-color: #ff6b6b; /* Rojo neón */
+            color: black;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 18px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #ff8e8e;
+        }
+        #resultado {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.3em;
+            font-weight: bold;
+            background-color: #2a2a44;
+            border: 1px solid #6c6c9a;
+        }
+        .body-name {
+            color: #ffd700; /* Dorado para el nombre */
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>🪐 Identificador de Cuerpo Celeste</h2>
+        
+        <label for="codigo">Ingresa el Código (1-5):</label>
+        <input type="number" id="codigo" min="1" max="5" placeholder="1: Estrella, 2: Planeta, etc.">
+        
+        <button onclick="identificarCuerpo()">Identificar</button>
+        
+        <div id="resultado">Esperando código...</div>
+    </div>
+
+    <script>
+        function identificarCuerpo() {
+            // 1. Obtener el valor ingresado por el usuario
+            const codigoInput = document.getElementById('codigo').value;
+            // Convertir a entero (importante para el SWITCH)
+            const codigo = parseInt(codigoInput);
+            const resultadoDiv = document.getElementById('resultado');
+            let cuerpoCeleste = "";
+            let mensajeAdicional = "";
+
+            // 2. Validación simple de entrada
+            if (isNaN(codigo) || codigoInput.trim() === "") {
+                resultadoDiv.innerHTML = "❌ **Error:** Por favor, ingresa un código numérico válido (1-5).";
+                resultadoDiv.style.backgroundColor = '#721c24';
+                resultadoDiv.style.color = '#f8d7da';
+                return;
+            }
+            
+            // 3. Aplicar la estructura SWITCH
+            switch (codigo) {
+                case 1:
+                    cuerpoCeleste = "Estrella";
+                    mensajeAdicional = "— Una esfera de plasma que genera luz y calor por fusión nuclear.";
+                    break;
+                case 2:
+                    cuerpoCeleste = "Planeta";
+                    mensajeAdicional = "— Un cuerpo que orbita una estrella y ha limpiado su órbita de otros cuerpos.";
+                    break;
+                case 3:
+                    cuerpoCeleste = "Cometa";
+                    mensajeAdicional = "— Un cuerpo de hielo, polvo y rocas que desarrolla una 'cola' brillante cerca del Sol.";
+                    break;
+                case 4:
+                    cuerpoCeleste = "Asteroide";
+                    mensajeAdicional = "— Un cuerpo rocoso o metálico pequeño que orbita el Sol (principalmente entre Marte y Júpiter).";
+                    break;
+                case 5:
+                    cuerpoCeleste = "Galaxia";
+                    mensajeAdicional = "— Un sistema masivo de estrellas, gas, polvo y materia oscura unidos gravitatoriamente.";
+                    break;
+                default:
+                    // Se ejecuta si el código no coincide con ningún 'case' (por ejemplo, 0, 6, -1)
+                    cuerpoCeleste = "Código Desconocido";
+                    mensajeAdicional = "— Por favor, usa un código válido entre 1 y 5.";
+            }
+
+            // 4. Mostrar el resultado
+            resultadoDiv.innerHTML = `
+                Código ingresado: **${codigo}**<br>
+                Cuerpo celeste identificado: <span class="body-name">${cuerpoCeleste}</span>
+                <br><small>${mensajeAdicional}</small>
+            `;
+            // Resetear colores para el resultado exitoso
+            resultadoDiv.style.backgroundColor = '#2a2a44';
+            resultadoDiv.style.color = '#e0e0ff';
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clasificador de Brillo Estelar</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h2 {
+            color: #333;
+            text-align: center;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        input[type="number"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #resultado {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #e9ecef;
+            text-align: center;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Clasificación de Brillo Estelar (Magnitud Aparente)</h2>
+        
+        <label for="magnitud">Ingresa la Magnitud Aparente ($m$):</label>
+        <input type="number" id="magnitud" step="any" placeholder="Ej: 1.5, -0.7, 6.0">
+        
+        <button onclick="clasificarBrillo()">Clasificar</button>
+        
+        <div id="resultado">Esperando valor...</div>
+    </div>
+
+    <script>
+        function clasificarBrillo() {
+            // 1. Obtener el valor ingresado por el usuario
+            const magnitudInput = document.getElementById('magnitud').value;
+            const magnitud = parseFloat(magnitudInput);
+            const resultadoDiv = document.getElementById('resultado');
+            let clasificacion = "";
+
+            // 2. Validar que el valor es un número
+            if (isNaN(magnitudInput) || magnitudInput.trim() === "") {
+                resultadoDiv.innerHTML = "❌ **Error:** Por favor, ingresa un valor numérico válido.";
+                resultadoDiv.style.backgroundColor = '#f8d7da';
+                resultadoDiv.style.color = '#721c24';
+                return; 
+            }
+
+            // 3. Aplicar la clasificación basada en la magnitud (IF-ELSE IF-ELSE)
+            // Una magnitud MENOR o IGUAL (m <= 0.0) significa más brillo.
+            if (magnitud <= 0.0) {
+                clasificacion = "Extremadamente Brillante";
+                resultadoDiv.style.color = '#006400'; // Verde oscuro
+            } else if (magnitud <= 2.0) {
+                // 0.0 < magnitud <= 2.0
+                clasificacion = "Muy Brillante";
+                resultadoDiv.style.color = '#007bff'; // Azul
+            } else if (magnitud <= 6.0) {
+                // 2.0 < magnitud <= 6.0 (6.0 es el límite aproximado visible a simple vista)
+                clasificacion = "Brillante";
+                resultadoDiv.style.color = '#ffc107'; // Amarillo/Naranja
+            } else if (magnitud <= 8.0) {
+                // 6.0 < magnitud <= 8.0
+                clasificacion = "Débil";
+                resultadoDiv.style.color = '#6c757d'; // Gris
+            } else {
+                // magnitud > 8.0
+                clasificacion = "No Visible";
+                resultadoDiv.style.color = '#dc3545'; // Rojo
+            }
+
+            // 4. Mostrar el resultado
+            resultadoDiv.innerHTML = `🌟 **Magnitud:** ${magnitud.toFixed(2)}<br>**Clasificación:** ${clasificacion}`;
+            resultadoDiv.style.backgroundColor = '#d1ecf1'; // Fondo general
+            
+            // Reestablecer color de texto para evitar conflictos con el fondo general, a menos que sea un error
+            if(resultadoDiv.style.color === '#721c24'){
+                 resultadoDiv.style.backgroundColor = '#f8d7da';
+            } else {
+                 resultadoDiv.style.color = '#333';
+            }
+        }
+    </script>
+
+</body>
+</html>

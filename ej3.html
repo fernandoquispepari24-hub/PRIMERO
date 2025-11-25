@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contador de Cráteres Lunares</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background-color: #f0f0f4;
+        }
+        .container {
+            max-width: 550px;
+            margin: 0 auto;
+            padding: 25px;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #34495e;
+            text-align: center;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        p.instructions {
+            background-color: #ecf0f1;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            font-style: italic;
+        }
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        input[type="number"] {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #bdc3c7;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #8e44ad; /* Púrpura */
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #9b59b6;
+        }
+        #lista-crateres {
+            min-height: 40px;
+            padding: 10px;
+            border: 1px solid #dcdcdc;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            background-color: #f9f9f9;
+        }
+        #resultado {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 5px;
+            font-size: 1.2em;
+            text-align: center;
+            font-weight: bold;
+            background-color: #e6e6fa; /* Lavanda */
+            color: #34495e;
+        }
+        .large-crater {
+            color: #c0392b; /* Rojo para cráteres grandes */
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>🌑 Contador de Cráteres Lunares Grandes</h2>
+        
+        <p class="instructions">Ingresa el diámetro de cada cráter (en km). Para finalizar el registro y contar, ingresa **0**.</p>
+        
+        <div class="input-group">
+            <input type="number" id="diametro" step="any" placeholder="Diámetro del cráter (km)">
+            <button onclick="registrarCrater()">Registrar</button>
+        </div>
+
+        <p>Diámetros registrados (para su visualización):</p>
+        <div id="lista-crateres"></div>
+        
+        <div id="resultado">Esperando diámetros...</div>
+    </div>
+
+    <script>
+        // Variables globales
+        let contadorGrandes = 0; // Contará los cráteres > 50 km
+        let diametrosRegistrados = []; // Array para mostrar visualmente los diámetros
+
+        function registrarCrater() {
+            const inputElement = document.getElementById('diametro');
+            const diametroInput = inputElement.value;
+            const diametro = parseFloat(diametroInput);
+            const resultadoDiv = document.getElementById('resultado');
+
+            // 1. Validación de entrada (mínima)
+            if (isNaN(diametroInput) || diametroInput.trim() === "") {
+                alert("Por favor, ingresa un diámetro numérico válido.");
+                return;
+            }
+            
+            // 2. Ejecutar la lógica de control (simulando un bucle WHILE)
+            // Se usa el valor de 0 como condición de parada, al igual que en un bucle WHILE.
+            if (diametro === 0) {
+                // La condición de parada ha sido satisfecha (simulando la condición del WHILE)
+                mostrarResultado();
+                inputElement.disabled = true; // Desactivar el input
+                document.querySelector('button').disabled = true; // Desactivar el botón
+                return;
+            }
+            
+            // 3. Procesar el dato antes de la condición de parada
+            diametrosRegistrados.push(diametro);
+            
+            // Simulación del bucle WHILE:
+            // La lógica para incrementar el contador se realiza aquí dentro de la función 
+            // ya que en un entorno web basado en eventos, el bucle se "rompe" en llamadas sucesivas.
+
+            // La condición dentro de un WHILE se verificaría: while (diametro !== 0) { ... }
+            if (diametro > 50) {
+                contadorGrandes++; // Aumentar el contador si el diámetro > 50 km
+            }
+            
+            // 4. Actualizar la interfaz y limpiar el input
+            actualizarListaCrateres(diametro);
+            inputElement.value = '';
+            inputElement.focus();
+            resultadoDiv.innerHTML = `Llevas ${diametrosRegistrados.length} diámetros registrados.`;
+        }
+        
+        function actualizarListaCrateres(nuevoDiametro) {
+            const listaDiv = document.getElementById('lista-crateres');
+            
+            const item = document.createElement('span');
+            item.textContent = `${nuevoDiametro.toFixed(1)} km`;
+            
+            // Resaltar si el cráter es grande
+            if (nuevoDiametro > 50) {
+                item.className = 'large-crater';
+            }
+            
+            listaDiv.appendChild(item);
+            listaDiv.appendChild(document.createTextNode(' | '));
+        }
+
+        function mostrarResultado() {
+            const resultadoDiv = document.getElementById('resultado');
+            
+            resultadoDiv.innerHTML = `
+                ✅ **PROCESO TERMINADO** (Se ingresó 0 como diámetro)<br>
+                Total de cráteres registrados: **${diametrosRegistrados.length}**<br>
+                Cráteres que superan los 50 km: **${contadorGrandes}**
+            `;
+            resultadoDiv.style.backgroundColor = '#d0f0c0'; // Verde claro de éxito
+            resultadoDiv.style.color = '#1b5e20';
+        }
+        
+        // Inicializar la lista al cargar la página
+        document.addEventListener('DOMContentLoaded', () => {
+             document.getElementById('lista-crateres').innerHTML = 'Ningún cráter registrado aún.';
+        });
+    </script>
+
+</body>
+</html>
